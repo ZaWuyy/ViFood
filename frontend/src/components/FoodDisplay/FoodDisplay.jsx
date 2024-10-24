@@ -13,7 +13,7 @@ const FoodDisplay = ({ category }) => {
     };
     const truncateDescription = (description) => {
       const words = description.split(' ');
-      return words.length > 7 ? words.slice(0, 7).join(' ') + '...' : description;
+      return words.length > 6 ? words.slice(0, 6).join(' ') + '...' : description;
   };
 
     return (
