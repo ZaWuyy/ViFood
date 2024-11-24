@@ -10,6 +10,7 @@ const StoreContextProvider = (props) => {
     const [cartItems, setCartItems] = useState({})
     const url = "http://localhost:4000"
     const [token,setToken] = useState("");
+    const [currentUser, setCurrentUser] = useState(null);
     const [food_list, setFoodList] = useState([]);
     const [searchSuggestions, setSearchSuggestions] = useState([]);
 
@@ -85,6 +86,35 @@ const StoreContextProvider = (props) => {
             return null;
         }
     };
+    const fetchProfile = async () => {
+        if (token) {
+            try {
+                const response = await axios.get(url + "/api/user/profile", { headers: { Authorization: `Bearer ${token}` } });
+                if (response.data.success) {
+                    setCurrentUser(response.data.user);
+                } else {
+                    console.error(response.data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+            }
+        }
+    };
+
+    const updateProfile = async (name, email) => {
+        if (token) {
+            try {
+                const response = await axios.put(url + "/api/user/update-profile", { name, email }, { headers: { Authorization: `Bearer ${token}` } });
+                if (response.data.success) {
+                    setCurrentUser(response.data.user);
+                } else {
+                    console.error(response.data.message);
+                }
+            } catch (error) {
+                console.error("Error updating profile:", error);
+            }
+        }
+    };
 
     useEffect(() => {
         async function loadData(){
@@ -94,8 +124,9 @@ const StoreContextProvider = (props) => {
                 await loadCartData(localStorage.getItem("token"));
             }
         }
+        fetchProfile();
         loadData();
-    },[])
+    },[token])
 
     const contextValue = {
         food_list,
@@ -110,7 +141,10 @@ const StoreContextProvider = (props) => {
         getTotalCartAmount,
         url,
         token,
-        setToken
+        setToken,
+        currentUser,
+        fetchProfile,
+        updateProfile,
     }
 
     return (

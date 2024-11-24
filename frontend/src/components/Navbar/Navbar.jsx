@@ -8,15 +8,15 @@ import LoginPopup from "../LoginPopup/LoginPopup";
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("home");
   const [showLoginPopup, setShowLoginPopup] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);  // Mới thêm state này
-  const [search, setSearch] = useState(""); // State lưu giá trị tìm kiếm
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [search, setSearch] = useState("");
   const {
     getTotalCartCount,
     token,
     setToken,
-    fetchFoodList,  // API lấy danh sách món ăn
-    searchSuggestions,  // API gợi ý tìm kiếm
-    state,  // Truy cập trạng thái hiện tại của StoreContext
+    fetchFoodList,
+    searchSuggestions,
+    state,
   } = useContext(StoreContext);
   const navigate = useNavigate();
 
@@ -24,10 +24,10 @@ const Navbar = ({ setShowLogin }) => {
     const value = e.target.value;
     setSearch(value);
     if (value) {
-      await fetchFoodList(value); // Gọi API để lấy gợi ý
-      setShowSuggestions(true);  // Hiển thị suggestion box khi có dữ liệu
+      await fetchFoodList(value);
+      setShowSuggestions(true);
     } else {
-      setShowSuggestions(false);  // Ẩn suggestion box khi không có giá trị tìm kiếm
+      setShowSuggestions(false);
     }
   };
 
@@ -38,14 +38,14 @@ const Navbar = ({ setShowLogin }) => {
   };
 
   const handleSearchSubmit = () => {
-    navigate("/"); // Điều hướng đến trang Home
-    fetchFoodList(search); // Lấy danh sách món ăn dựa trên từ khóa
-    setShowSuggestions(false); // Ẩn suggestion box sau khi nhấn enter
+    navigate("/");
+    fetchFoodList(search);
+    setShowSuggestions(false);
   };
 
   const handleSuggestionClick = (id) => {
-    navigate(`/product/${id}`); // Điều hướng đến trang sản phẩm khi click vào gợi ý
-    setShowSuggestions(false); // Ẩn suggestion box khi click vào sản phẩm
+    navigate(`/product/${id}`);
+    setShowSuggestions(false);
   };
 
   const logout = () => {
@@ -75,8 +75,8 @@ const Navbar = ({ setShowLogin }) => {
               placeholder="Search..."
               className="search-input"
               value={search}
-              onChange={handleSearch} // Gọi hàm tìm kiếm khi nhập
-              onKeyDown={handleKeyDown} // Tìm kiếm khi nhấn Enter
+              onChange={handleSearch}
+              onKeyDown={handleKeyDown}
             />
             {search && showSuggestions && searchSuggestions.length > 0 && (
               <ul className="search-suggestions active">
@@ -91,7 +91,7 @@ const Navbar = ({ setShowLogin }) => {
               src={assets.search_icon}
               alt="Search"
               className="search-icon"
-              onClick={handleSearchSubmit} // Gửi từ khóa tìm kiếm
+              onClick={handleSearchSubmit}
             />
           </div>
         </div>
@@ -119,14 +119,23 @@ const Navbar = ({ setShowLogin }) => {
             <div className="navbar-profile">
               <img src={assets.profile_icon} alt="Profile" />
               <ul className="nav-profile-dropdown">
-                <li>
-                  <img src={assets.bag_icon} alt="Orders" />
-                  <p>Orders</p>
+                <li className="nav-item">
+                  <Link to="/order" className="nav-link">
+                    <img src={assets.bag_icon} alt="Orders" className="nav-icon" />
+                    <p className="nav-text">Orders</p>
+                  </Link>
                 </li>
                 <hr />
-                <li onClick={logout}>
-                  <img src={assets.logout_icon} alt="Logout" />
-                  <p>Logout</p>
+                <li className="nav-item"> 
+                  <Link to="/profile" className="nav-link">
+                    <img src={assets.profile_icon} alt="Profile" className="nav-icon"/>
+                    <p className="nav-text">Profile</p>
+                  </Link>
+                </li>
+                <hr />
+                <li className="nav-item" onClick={logout} >
+                  <img src={assets.logout_icon} alt="Logout" className="nav-icon" />
+                  <p className="nav-text">Logout</p>
                 </li>
               </ul>
             </div>
