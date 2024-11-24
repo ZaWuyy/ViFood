@@ -32,7 +32,7 @@ const Footer = () => {
         </div>
       </div>
       <p className="footer-copyright">
-        Copyright 2024 © Tomato.com - All Right Reserved.
+        Copyright 2024 © ViFood.com - All Right Reserved.
       </p>
       <hr></hr>
     </div>

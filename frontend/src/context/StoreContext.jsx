@@ -10,7 +10,8 @@ const StoreContextProvider = (props) => {
     const [cartItems, setCartItems] = useState({})
     const url = "http://localhost:4000"
     const [token,setToken] = useState("");
-    const [food_list, setFoodList] = useState([])
+    const [food_list, setFoodList] = useState([]);
+    const [searchSuggestions, setSearchSuggestions] = useState([]);
 
     const addToCart = async (itemId) => {
         if (!cartItems[itemId]) {
@@ -30,7 +31,13 @@ const StoreContextProvider = (props) => {
             await axios.post(url + "/api/cart/remove", {itemId}, {headers:{token}});
         }
     }
-
+    const getTotalCartCount = () => {
+        let totalCount = 0;
+        for (const item in cartItems) {
+            totalCount += cartItems[item];
+        }
+        return totalCount;
+    };
     const getTotalCartAmount = () => {
         let totalAmount = 0;
         for (const item in cartItems) {
@@ -42,14 +49,54 @@ const StoreContextProvider = (props) => {
         return totalAmount;
     }
 
-    const fetchFoodList = async () => {
-        const response = await axios.get(url+"/api/food/list");
-        setFoodList(response.data.data)
-    }
+    const fetchFoodList = async (search = '') => {
+        try {
+            const response = await axios.get(`${url}/api/food/list?search=${search}`);
+            if (response.data.success) {
+                setFoodList(response.data.data);
+            } else {
+                console.error("Error fetching food list:", response.data.message);
+            }
+        } catch (error) {
+            console.error("Error fetching food list:", error);
+        }
+    };
+    const fetchSearchSuggestions = async (search) => {
+        if (search.length > 0) {
+            try {
+                const response = await axios.get(`${url}/api/food/list?search=${search}`);
+                if (response.data.success) {
+                    setSearchSuggestions(response.data.data); // Cập nhật gợi ý
+                } else {
+                    setSearchSuggestions([]); // Nếu không tìm thấy, đặt gợi ý thành rỗng
+                }
+            } catch (error) {
+                console.error("Error fetching search suggestions:", error);
+                setSearchSuggestions([]); // Nếu có lỗi, đặt gợi ý thành rỗng
+            }
+        } else {
+            setSearchSuggestions([]); // Nếu không có từ khóa tìm kiếm, đặt gợi ý thành rỗng
+        }
+    };
     const loadCartData = async (token) => {
         const response = await axios.post(url+"/api/cart/list", {headers:{token}});
         setCartItems(response.data.cartData);
-    }
+    };
+    const fetchFoodDetail = async (id) => {
+        try {
+            const response = await axios.get(`${url}/api/food/${id}`);
+            console.log(response.data); // Log dữ liệu để kiểm tra
+            if (response.data.success) {
+                return response.data.data;
+            } else {
+                console.error("Error fetching food detail:", response.data.message);
+                return null;
+            }
+        } catch (error) {
+            console.error("Error fetching food detail:", error);
+            return null;
+        }
+    };
 
     useEffect(() => {
         async function loadData(){
@@ -68,6 +115,11 @@ const StoreContextProvider = (props) => {
         setCartItems,
         addToCart,
         removeFromCart,
+        fetchFoodList,
+        fetchSearchSuggestions, 
+        fetchFoodDetail,
+        searchSuggestions,
+        getTotalCartCount,
         getTotalCartAmount,
         url,
         token,

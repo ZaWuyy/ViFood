@@ -151,7 +151,7 @@ const List = ({ url }) => {
                                 checked={selectedFoods.includes(item._id)}
                                 onChange={() => toggleSelectFood(item._id)}
                             />
-                            <img src={`${url}/images/` + item.image} alt={item.name} />
+                            <img src={`${url}/images/` + item.image} alt={item.image} />
                             <p><strong>{item.name}</strong></p>
                             <p>{item.category}</p>
                             <p>{formatPrice(item.price)}</p>
