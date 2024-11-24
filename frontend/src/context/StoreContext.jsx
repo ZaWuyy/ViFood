@@ -54,28 +54,16 @@ const StoreContextProvider = (props) => {
             const response = await axios.get(`${url}/api/food/list?search=${search}`);
             if (response.data.success) {
                 setFoodList(response.data.data);
+                // Nếu có tìm kiếm, cập nhật gợi ý
+                if (search) {
+                    const suggestions = response.data.data.map(item => ({ id: item._id, name: item.name }));
+                    setSearchSuggestions(suggestions);
+                }
             } else {
                 console.error("Error fetching food list:", response.data.message);
             }
         } catch (error) {
             console.error("Error fetching food list:", error);
-        }
-    };
-    const fetchSearchSuggestions = async (search) => {
-        if (search.length > 0) {
-            try {
-                const response = await axios.get(`${url}/api/food/list?search=${search}`);
-                if (response.data.success) {
-                    setSearchSuggestions(response.data.data); // Cập nhật gợi ý
-                } else {
-                    setSearchSuggestions([]); // Nếu không tìm thấy, đặt gợi ý thành rỗng
-                }
-            } catch (error) {
-                console.error("Error fetching search suggestions:", error);
-                setSearchSuggestions([]); // Nếu có lỗi, đặt gợi ý thành rỗng
-            }
-        } else {
-            setSearchSuggestions([]); // Nếu không có từ khóa tìm kiếm, đặt gợi ý thành rỗng
         }
     };
     const loadCartData = async (token) => {
@@ -116,7 +104,6 @@ const StoreContextProvider = (props) => {
         addToCart,
         removeFromCart,
         fetchFoodList,
-        fetchSearchSuggestions, 
         fetchFoodDetail,
         searchSuggestions,
         getTotalCartCount,
