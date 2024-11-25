@@ -4,7 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 import './ProfileInfo.css';
 
 const ProfileInfo = () => {
-    const { currentUser, fetchProfile, updateProfile } = useContext(StoreContext);
+    const { currentUser, fetchProfile, updateProfile, changePassword } = useContext(StoreContext);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [isEditing, setIsEditing] = useState(false);
@@ -41,8 +41,13 @@ const ProfileInfo = () => {
             alert("New passwords do not match");
             return;
         }
-        // Call the API to change the password
-        // await changePassword(currentPassword, newPassword);
+        if (newPassword.length < 8) {
+            alert("Password must be at least 8 characters long");
+            return;
+        }
+        await changePassword(currentPassword, newPassword);
+        alert("Password changed successfully");
+
         handleCloseDialog();
     };
 
@@ -109,9 +114,9 @@ const ProfileInfo = () => {
                         )}
                         <Button
                             onClick={handleOpenDialog}
-                            color="secondary"
-                            variant="outlined"
-                            style={{ marginLeft: '10px' }}
+                            color="primary"
+                            variant="contained"
+                            
                         >
                             Change Password
                         </Button>

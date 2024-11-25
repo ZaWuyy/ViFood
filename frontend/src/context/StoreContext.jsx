@@ -115,6 +115,51 @@ const StoreContextProvider = (props) => {
             }
         }
     };
+    const changePassword = async (currentPassword, newPassword) => {
+        if (token) {
+            try {
+                const response = await axios.put(url + "/api/user/change-password", { currentPassword, newPassword }, { headers: { Authorization: `Bearer ${token}` } });
+                if (response.data.success) {
+                    console.log("Password changed successfully");
+                } else {
+                    console.error(response.data.message);
+                }
+            } catch (error) {
+                console.error("Error changing password:", error);
+            }
+        }
+    };
+
+    const createOrder = async (address, foods, totalPrice) => {
+        if (token) {
+            try {
+                const response = await axios.post(url + "/api/order/create", { address, foods, totalPrice }, { headers: { Authorization: `Bearer ${token}` } });
+                if (response.data.success) {
+                    alert("Order created successfully");
+                } else {
+                    console.error(response.data.message);
+                }
+            } catch (error) {
+                console.error("Error creating order:", error);
+            }
+        }
+    };
+
+    const fetchOrders = async () => {
+        if (token && currentUser) {
+            try {
+                const response = await axios.get(url + `/api/order/user/${currentUser._id}`, { headers: { Authorization: `Bearer ${token}` } });
+                if (response.data.success) {
+                    return response.data.orders;
+                } else {
+                    console.error(response.data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+            }
+        }
+        return [];
+    };
 
     useEffect(() => {
         async function loadData(){
@@ -126,6 +171,8 @@ const StoreContextProvider = (props) => {
         }
         fetchProfile();
         loadData();
+        fetchOrders();
+        
     },[token])
 
     const contextValue = {
@@ -145,6 +192,9 @@ const StoreContextProvider = (props) => {
         currentUser,
         fetchProfile,
         updateProfile,
+        changePassword,
+        createOrder,
+        fetchOrders,
     }
 
     return (

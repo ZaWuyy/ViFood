@@ -104,8 +104,30 @@ const updateProfile = async (req, res) => {
 
 // Change password
 const changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const user = await userModel.findById(req.body.userId);
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        } else {
+            const isMatch = await bcrypt.compare(currentPassword, user.password);
+            if (!isMatch) {
+                return res.json({ success: false, message: "Incorrect current password" });
+            }
+            if (newPassword.length < 8) {
+                return res.json({ success: false, message: "Please enter a strong password" });
+            }
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(newPassword, salt);
+            const updatedUser = await userModel.findByIdAndUpdate(req.body.userId, { password: hashedPassword }, { new: true });
+            res.json({ success: true, updatedUser });
+        }
 
+} catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Error updating password" });
 }
+};
 
 export { loginUser, registerUser, fetchProfile, updateProfile, changePassword};
 export default router;

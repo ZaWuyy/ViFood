@@ -1,0 +1,65 @@
+/* General Container */
+.view-orders-container {
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Title Styling */
+.title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Orders Grid */
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+/* Order Card */
+.order-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Text Styling */
+.order-card p {
+    margin: 8px 0;
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Foods List */
+.order-foods ul {
+    padding-left: 20px;
+    margin-top: 10px;
+    color: #666;
+}
+
+.order-foods li {
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
+
+/* No Orders Message */
+.no-orders {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+    margin-top: 20px;
+}

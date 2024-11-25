@@ -120,7 +120,7 @@ const Navbar = ({ setShowLogin }) => {
               <img src={assets.profile_icon} alt="Profile" />
               <ul className="nav-profile-dropdown">
                 <li className="nav-item">
-                  <Link to="/order" className="nav-link">
+                  <Link to="/view-order" className="nav-link">
                     <img src={assets.bag_icon} alt="Orders" className="nav-icon" />
                     <p className="nav-text">Orders</p>
                   </Link>
